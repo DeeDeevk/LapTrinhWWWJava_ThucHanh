@@ -8,8 +8,10 @@
 <h1><%= "Hello World!" %>
 </h1>
 <br/>
-<a href="processFormUpload">Dang Ky</a>
+<a href="processFormUpload">Đăng ký</a>
 <br>
 <a href="login">Trang chủ</a>
+<br>
+<a href="uploadFile">Tải tệp</a>
 </body>
 </html>

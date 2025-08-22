@@ -7,6 +7,7 @@
             padding: 10px;
             background-color: grey;
             width: 40%;
+            border-radius: 10px;
         }
 
         .form-group {
