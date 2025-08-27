@@ -11,5 +11,7 @@
 <a href="hello-servlet">Hello Servlet</a>
 <br>
 <a href="uploadFile">Tải tệp</a>
+<br>
+<a href="sendMail">Gửi mail</a>
 </body>
 </html>
