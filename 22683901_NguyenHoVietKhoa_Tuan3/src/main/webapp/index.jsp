@@ -11,5 +11,7 @@
 <a href="hello-servlet">Hello Servlet</a>
 <br>
 <a href="student">Student Registration Form</a>
+<br>
+<a href="account">Account Registration Form</a>
 </body>
 </html>
