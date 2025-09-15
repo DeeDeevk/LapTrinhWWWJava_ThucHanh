@@ -1,5 +1,8 @@
 package fit.iuh.nguyenhovietkhoa_tuan4_bai4.servlet;
 
+import fit.iuh.nguyenhovietkhoa_tuan4_bai4.beans.Book;
+import fit.iuh.nguyenhovietkhoa_tuan4_bai4.dao.BookDAO;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -7,12 +10,33 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.List;
 
-@WebServlet("/bookList")
+@WebServlet({"/books", "/book"})
 public class BookListServlet extends HttpServlet {
-
+    private BookDAO bookDAO = new BookDAO();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("danhsach.jsp").forward(req,resp);
+        String idstr = req.getParameter("id");
+        if (idstr != null) {
+            // Hiển thị chi tiết sản phẩm
+            int id = Integer.parseInt(idstr);
+            Book book = BookDAO.getBookById(id);
+
+            if (book == null) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
+                return;
+            }
+
+            req.setAttribute("book", book);
+            RequestDispatcher rd = req.getRequestDispatcher("/chitietsach.jsp");
+            rd.forward(req, resp);
+        } else {
+            // Hiển thị danh sách sản phẩm
+            List<Book> books = BookDAO.getAllBook();
+            req.setAttribute("books", books);
+            RequestDispatcher rd = req.getRequestDispatcher("/danhsach.jsp");
+            rd.forward(req, resp);
+        }
     }
 }
