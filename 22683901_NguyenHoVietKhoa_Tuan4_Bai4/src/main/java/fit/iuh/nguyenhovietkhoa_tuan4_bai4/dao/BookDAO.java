@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookDAO {
-    private final DBUtil dbUtil;
+    private DBUtil dbUtil;
 
     public BookDAO(DataSource dataSource){
         this.dbUtil = new DBUtil(dataSource);
@@ -63,6 +63,32 @@ public class BookDAO {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    public List<Book> getBookByTitle(String title) {
+        List<Book> books = new ArrayList<>();
+        String sql = "SELECT * FROM books WHERE title LIKE ?";
+        try(Connection conn = dbUtil.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, "%" + title + "%");
+            try (ResultSet rs = ps.executeQuery()){
+                if(rs.next()){
+                    Book b = new Book(
+                            rs.getInt("id"),
+                            rs.getString("title"),
+                            rs.getString("author"),
+                            rs.getDouble("price"),
+                            rs.getInt("quantity"),
+                            rs.getString("imgurl")
+                    );
+                    books.add(b);
+                }
+            }
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
+        return books;
     }
 }
 
