@@ -46,7 +46,7 @@ public class EmployeeServlet extends HttpServlet {
                 break;
 
             case "new":
-//                   req.setAttribute("departments", deptDao.getAll());
+                   req.setAttribute("departments", deptDao.getAllDepartments());
                 req.getRequestDispatcher("employee-form.jsp").forward(req, resp);
                 break;
             case "edit":

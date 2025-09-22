@@ -16,14 +16,14 @@
     <img src="${pageContext.request.contextPath}/images/HRbanner.jpg" height="200px"
          width="100%">
 
-    <form action="${pageContext.request.contextPath}/employees" method="post">
+    <form action="${pageContext.request.contextPath}/employees" method="get">
         <input type="hidden" name="id"/>
         Name: <input type="text" name="name"/><br/>
         Salary: <input type="text" name="salary"/><br/>
         Department:
         <select name="departmentId">
             <c:forEach var="dep" items="${departments}">
-                <option value="${dep.department_id}">${dep.department_name}</option>
+                <option value="${dep.id}">${dep.name}</option>
             </c:forEach>
         </select>
 
