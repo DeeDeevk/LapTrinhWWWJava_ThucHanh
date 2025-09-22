@@ -1,16 +1,21 @@
 package fit.iuh.nguyenhovietkhoa_tuan4_bai4.beans;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartBean {
     private List<CartItemBean> items;
+
+    public CartBean() {
+        this.items = new ArrayList<>();
+    }
 
     public List<CartItemBean> getItems() {
         return items;
     }
 
     // thêm sản phẩm
-    public void addProduct(Book b) {
+    public void addBook(Book b) {
         for (CartItemBean item : this.items) {
             if (item.getBook().getId() == b.getId()) {
                 item.setQuantity(item.getQuantity() + 1);

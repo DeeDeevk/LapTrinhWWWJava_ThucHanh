@@ -1,67 +1,164 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="fit.iuh.bookstore.tuan04_duongthekhanh_22660101.model.CartItem" %>
-<!DOCTYPE html>
 <html>
 <head>
-    <title>Giỏ hàng</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Your Shopping Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: #666;
+            color: white;
+            padding: 15px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .menu {
+            background: #999;
+            padding: 10px;
+        }
+
+        .menu a {
+            color: white;
+            margin-right: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            display: flex;
+            margin: 10px;
+        }
+
+        .sidebar {
+            width: 20%;
+            padding: 10px;
+        }
+
+        .content {
+            width: 80%;
+            padding: 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: #666;
+            color: white;
+            padding: 8px;
+            text-align: center;
+        }
+
+        td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            margin: 3px;
+            border: 1px solid #333;
+            background: #f0f0f0;
+            cursor: pointer;
+        }
+
+        .total {
+            text-align: right;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .actions {
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>
+<div class="header">IUH BOOKSTORE</div>
+<div class="menu">
+    <a href="#">HOME</a>
+    <a href="#">EXAMPLES</a>
+    <a href="#">SERVICES</a>
+    <a href="#">PRODUCTS</a>
+    <a href="#">CONTACT</a>
+    <a href="${pageContext.request.contextPath}/cart" style="float:right;">View Cart</a>
+</div>
+
 <div class="container">
-    <h3>Your Shopping Cart</h3>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h3>ABOUT US</h3>
+        <p>About us information will be here... <a href="#">Read More »</a></p>
+        <h3>SEARCH SITE</h3>
+        <div class="search-box">
+            <form action="${pageContext.request.contextPath}/books" method="get">
+                <input type="text" name="title" placeholder="Search..."/>
+                <input type="submit" value="Search"/>
+            </form>
+        </div>
+    </div>
 
-    <c:set var="cart" value="${sessionScope.cart}" />
-    <c:if test="${empty cart}">
-        <p>Giỏ hàng trống. <a href="books">Tiếp tục xem sách</a></p>
-    </c:if>
+    <!-- Content -->
+    <div class="content">
+        <h3>YOUR SHOPPING CART</h3>
 
-    <c:if test="${not empty cart}">
-        <table class="table table-bordered">
-            <thead>
-            <tr><th>Product ID</th><th>Product</th><th>Price</th><th>Qty</th><th>Total</th><th>Action</th></tr>
-            </thead>
-            <tbody>
-            <c:set var="sum" value="0" />
-            <c:forEach items="${cart.values()}" var="item">
+        <c:if test="${empty cart.items}">
+            <p>Cart is empty!</p>
+        </c:if>
+
+        <c:if test="${not empty cart.items}">
+            <table>
                 <tr>
-                    <td>${item.book.id}</td>
-                    <td>${item.book.title}</td>
-                    <td>${item.book.price}</td>
-                    <td>
-                        <form method="post" action="cart" class="d-inline">
-                            <input type="hidden" name="op" value="update" />
-                            <input type="hidden" name="id" value="${item.book.id}" />
-                            <input type="number" name="qty" value="${item.quantity}" min="0" style="width:70px" />
-                            <button class="btn btn-sm btn-primary" type="submit">Update</button>
-                        </form>
-                    </td>
-                    <td>${item.total}</td>
-                    <td>
-                        <form method="post" action="cart" style="display:inline">
-                            <input type="hidden" name="op" value="remove"/>
-                            <input type="hidden" name="id" value="${item.book.id}"/>
-                            <button class="btn btn-sm btn-danger">Remove</button>
-                        </form>
-                    </td>
+                    <th>Product ID</th>
+                    <th>Product name</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                    <th>Remove</th>
                 </tr>
-                <c:set var="sum" value="${sum + item.total}" />
-            </c:forEach>
-            </tbody>
-            <tfoot>
-            <tr><td colspan="4" class="text-end"><strong>Total price</strong></td><td colspan="2">${sum} VND</td></tr>
-            </tfoot>
-        </table>
+                <c:forEach var="item" items="${cart.items}">
+                    <tr>
+                        <td>${item.book.id}</td>
+                        <td>${item.book.title}</td>
+                        <td>${item.book.price}</td>
+                        <td>${item.quantity}</td>
+                        <td>${item.book.price * item.quantity}</td>
+                        <td>
+                            <form action="${pageContext.request.contextPath}/cart" method="post">
+                                <input type="hidden" name="action" value="remove"/>
+                                <input type="hidden" name="bookId" value="${item.book.id}"/>
+                                <input type="submit" value="Remove" class="btn"/>
+                            </form>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </table>
 
-        <a href="books" class="btn btn-secondary">Continue shopping</a>
-        <form method="post" action="cart" style="display:inline">
-            <input type="hidden" name="op" value="clear"/>
-            <button class="btn btn-warning">Clear cart</button>
-        </form>
+            <div class="total">
+                Total price (VND): ${cart.getTotal()}
+            </div>
 
-        <a href="checkout" class="btn btn-success">Checkout</a>
-    </c:if>
+            <div class="actions">
+<%--                <button class="btn">Checkout</button>--%>
+                <form action="${pageContext.request.contextPath}/thanhtoan.jsp">
+                    <button type="submit" class="btn">Checkout</button>
+                </form>
+                <a href="${pageContext.request.contextPath}/book" class="btn">Continue shopping</a>
+            </div>
+        </c:if>
+    </div>
 </div>
 </body>
 </html>

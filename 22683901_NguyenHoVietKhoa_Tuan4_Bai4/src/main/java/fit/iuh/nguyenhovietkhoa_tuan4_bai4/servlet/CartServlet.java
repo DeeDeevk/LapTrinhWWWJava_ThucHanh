@@ -29,7 +29,7 @@ public class CartServlet extends HelloServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
-            req.getRequestDispatcher("cart.jsp").forward(req, resp);
+            req.getRequestDispatcher("giohang.jsp").forward(req, resp);
         } catch (ServletException e) {
             throw new RuntimeException(e);
         }
@@ -48,7 +48,7 @@ public class CartServlet extends HelloServlet {
             if("add".equals(action)){
                 int id = Integer.parseInt(req.getParameter("id"));
                 Book book = bookDAO.getBookById(id);
-                cart.addProduct(book);
+                cart.addBook(book);
             }
             else if("update".equals(action)){
                 int id = Integer.parseInt(req.getParameter("bookId"));
