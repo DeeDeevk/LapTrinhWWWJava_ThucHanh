@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Employee list</title>
+</head>
+<body>
+    <h2>Employee list</h2>
+    <form th:action="@{/employees/finding/name}" method="get">
+        <label>Tìm kiếm theo tên</label>
+        <input type="text" name="name" placeholder="Vui lòng nhập tên cần tìm..." required/>
+        <button type="submit">Search</button>
+    </form>
+    <br>
+    <form th:action="@{/employees/finding/age}" method="get">
+        <label>Tìm kiếm theo tuổi</label>
+        <input type="text" name="age" placeholder="Vui lòng nhập tuổi cần tìm..." required/>
+        <button type="submit">Search</button>
+    </form>
+    <br>
+    <form th:action="@{/employees/finding/salary}" method="get">
+        <label>Tìm kiếm theo lương</label>
+        <input type="text" name="salary" placeholder="Vui lòng nhập số lương cần tìm..." required/>
+        <button type="submit">Search</button>
+    </form>
+    <br>
+    <a href="employees/add">Add Employee</a>
+    <br>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Salary</th>
+            <th>Action</th>
+            <th>Department</th>
+        </tr>
+        <tr th:each="emp: ${employees}">
+            <td th:text="${emp.name}"></td>
+            <td th:text="${emp.age}"></td>
+            <td th:text="${emp.salary}"></td>
+            <td th:text="${emp.department.name}"></td>
+            <td>
+                <form th:action="@{/employees/delete/{id}(id=${emp.id})}" method="post"
+                >
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <a href="departments">Department list</a>
+</body>
+</html>
