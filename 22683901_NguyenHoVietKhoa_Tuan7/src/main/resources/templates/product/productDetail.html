@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Detail</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <style>
+        body {
+            font-family: "Segoe UI", Roboto, sans-serif;
+            background-color: #f6f8fa;
+            margin: 0;
+            padding: 40px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 30px 40px;
+        }
+
+        h1 {
+            color: #007b83;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .product-info {
+            margin-top: 20px;
+            line-height: 1.8;
+        }
+
+        .product-info p {
+            font-size: 16px;
+        }
+
+        .in-stock {
+            color: #2a7;
+            font-weight: bold;
+        }
+
+        .out-stock {
+            color: #c33;
+            font-weight: bold;
+        }
+
+        .comments {
+            margin-top: 30px;
+        }
+
+        .comments h3 {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .comment {
+            background-color: #f2f8f3;
+            border-left: 4px solid #2a7;
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-style: italic;
+        }
+
+        .empty-comment {
+            color: #777;
+            font-style: italic;
+            background: #fafafa;
+            border: 1px dashed #ddd;
+            border-radius: 6px;
+            padding: 10px;
+        }
+        .btn-back {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Product Detail</h1>
+
+    <div class="product-info">
+        <p><strong>Name:</strong> <span th:text="${product.name}"></span></p>
+        <p><strong>Price:</strong> <span th:text="${product.price} + ' ₫'"></span></p>
+        <p>
+            <strong>Trạng thái:</strong>
+            <span th:classappend="${product.inStock} ? 'in-stock' : 'out-stock'"
+                  th:text="${product.inStock} ? 'Còn hàng' : 'Hết hàng'"></span>
+        </p>
+    </div>
+
+    <div class="comments">
+        <h3>Customer Comments</h3>
+        <div th:if="${#lists.isEmpty(product.comments)}" class="empty-comment">
+            <p>Chưa có bình luận nào.</p>
+        </div>
+        <div th:each="c : ${product.comments}" class="comment">
+            <span th:text="${c.text}">Sample comment</span>
+        </div>
+    </div>
+    <div class="text-center mt-4">
+        <a th:href="@{/product}" class="btn-back">← Quay về Trang Chủ</a>
+    </div>
+</div>
+</body>
+</html>

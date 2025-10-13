@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi Tiết Hóa Đơn</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 40px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h1 {
+            border-bottom: 2px solid black;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            background: #fff;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            width: fit-content;
+        }
+
+        .info p {
+            margin: 8px 0;
+        }
+
+        table {
+            width: 90%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th {
+            background: linear-gradient(135deg, #007bff, #00a6ff);
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f6f6f6;
+        }
+
+        tr:hover {
+            background-color: #e8f5e9;
+        }
+
+        tfoot td {
+            background-color: #f1f1f1;
+            font-weight: bold;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 16px;
+            background-color: #2a7;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 25px;
+            text-decoration: none;
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .total {
+            text-align: right;
+            font-size: 1.1em;
+        }
+        .btn-back:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Chi Tiết Hóa Đơn #<span th:text="${order.id}">1</span></h1>
+
+<div class="info">
+    <p><strong>Khách hàng:</strong> <span th:text="${order.customer.name}">Tên Khách Hàng</span></p>
+    <p><strong>Ngày đặt:</strong> <span th:text="${#calendars.format(order.date, 'dd-MM-yyyy')}">01-01-2023</span></p>
+</div>
+
+<h2 style="margin-top: 30px;">Sản phẩm đã đặt</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>Tên sản phẩm</th>
+        <th>Giá mua</th>
+        <th>Số lượng</th>
+        <th>Thành tiền</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="line : ${order.orderlines}">
+        <td th:text="${line.product.name}">Tên SP</td>
+        <td th:text="${#numbers.formatDecimal(line.purchasePrice, 0, 'COMMA', 2, 'POINT')} + ' USD'">10.00 USD</td>
+        <td th:text="${line.amount}">2</td>
+        <td th:text="${#numbers.formatDecimal(line.purchasePrice * line.amount, 0, 'COMMA', 2, 'POINT')} + ' USD'">20.00
+            USD
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="3" class="total">TỔNG CỘNG:</td>
+        <td th:text="${#numbers.formatDecimal(order.getTotalAmount(), 0, 'COMMA', 2, 'POINT')} + ' USD'">100.00 USD</td>
+    </tr>
+    </tfoot>
+</table>
+
+<a th:href="@{/order}" class="btn-back">⬅ Quay lại Danh sách Hóa đơn</a>
+
+</body>
+</html>
